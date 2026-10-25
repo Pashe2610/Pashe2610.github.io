@@ -2,133 +2,238 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Гирлянда MELK</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0c0a16">
+<title>Гирлянда</title>
 <style>
-:root{--bg:#14161c;--card:#1d2029;--tx:#eef0f4;--mut:#8b91a1;--ac:#4cc9f0;--line:#2c3040}
-*{box-sizing:border-box}
-body{margin:0;padding:16px;background:var(--bg);color:var(--tx);font:16px system-ui,sans-serif;max-width:520px;margin-inline:auto}
-h1{font-size:20px;margin:0 0 12px}
-section{background:var(--card);border-radius:12px;padding:14px;margin-bottom:12px}
-h2{font-size:15px;margin:0 0 10px;color:var(--mut);font-weight:600}
-button{background:var(--line);color:var(--tx);border:0;border-radius:8px;padding:12px;font-size:15px;min-height:44px}
-button.main{background:var(--ac);color:#06202a;font-weight:700;width:100%}
-button:active{opacity:.7}
-.row{display:flex;gap:8px;flex-wrap:wrap}
-.row>*{flex:1}
-input[type=range]{width:100%;margin:6px 0 12px}
-input[type=color]{width:100%;height:56px;border:0;background:none;padding:0}
-input[type=text],input[type=number]{width:100%;padding:12px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--tx);font-size:16px}
-.sw{height:44px;border-radius:8px;border:0}
-#st{color:var(--mut);margin:0 0 10px;font-size:14px}
-#log{font:12px monospace;color:var(--mut);max-height:140px;overflow:auto;white-space:pre-wrap}
-.off{opacity:.4;pointer-events:none}
+:root{--bg:#0c0a16;--pn:#17142a;--ln:#2a2545;--tx:#f2eefc;--mu:#9a93b8;--a:#ff3b6b;--c:#000}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:radial-gradient(120% 60% at 50% -10%,color-mix(in srgb,var(--c) 38%,transparent),transparent 70%),var(--bg);color:var(--tx);font:16px/1.4 system-ui,sans-serif;padding:0 14px 90px;max-width:560px;margin-inline:auto;min-height:100vh}
+header{position:sticky;top:0;z-index:5;padding:calc(10px + env(safe-area-inset-top,0px)) 0 10px;background:linear-gradient(var(--bg) 70%,transparent)}
+#strip{display:flex;justify-content:space-between;padding:10px 6px;background:#000;border-radius:14px;border:1px solid var(--ln)}
+#strip i{width:9px;height:9px;border-radius:50%;background:var(--c);box-shadow:0 0 10px 3px var(--c)}
+.bar{display:flex;gap:8px;margin-top:10px}
+.bar button{flex:1;padding:11px 4px}
+#st{font-size:13px;color:var(--mu);margin:8px 2px 0}
+button{background:var(--ln);color:var(--tx);border:0;border-radius:10px;padding:11px 12px;font-size:15px;min-height:44px}
+button:active{transform:scale(.97)}
+button.pri{background:var(--a);color:#fff;font-weight:700}
+button.on{outline:2px solid var(--a)}
+.p{background:var(--pn);border-radius:14px;padding:14px;margin-top:12px;border:1px solid var(--ln)}
+h2{font-size:14px;color:var(--mu);margin:0 0 10px;font-weight:600}
+.tab{display:none}.tab.v{display:block}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:#100d20;border-top:1px solid var(--ln);padding-bottom:env(safe-area-inset-bottom,0px);z-index:9}
+nav button{flex:1;background:none;border-radius:0;font-size:12px;padding:8px 2px;color:var(--mu);display:flex;flex-direction:column;align-items:center;gap:2px}
+nav button b{font-size:20px;font-weight:400}
+nav button.v{color:var(--tx);box-shadow:inset 0 2px 0 var(--a)}
+input[type=range]{width:100%;accent-color:var(--a);margin:4px 0 10px}
+input[type=text],input[type=number]{width:100%;background:var(--bg);color:var(--tx);border:1px solid var(--ln);border-radius:10px;padding:11px;font-size:16px}
+input[type=color]{border:0;background:none;width:48px;height:44px;padding:0}
+.g{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.g button{text-align:left;display:flex;gap:8px;align-items:center}
+.r{display:flex;gap:8px;align-items:center;margin-top:8px}
+.r>*{flex:1}.r>.s{flex:0 0 auto}
+#wheel{display:block;margin:0 auto;touch-action:none;border-radius:50%;max-width:100%}
+.rg{display:grid;grid-template-columns:22px 1fr 40px;gap:8px;align-items:center;font-size:14px}
+.rg input[type=range]{margin:2px 0}
+.sw{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.sw button{width:44px;padding:0;border-radius:50%}
+.note{font-size:13px;color:var(--mu);margin:8px 0 0}
+.step{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+.step input[type=number]{width:80px}
 </style>
 </head>
 <body>
-<h1>Гирлянда MELK</h1>
-<p id="st">Не подключено. Закрой Lotus Lamp X и нажми кнопку.</p>
-<button class="main" id="conn">Подключиться</button>
-<button style="width:100%;margin-top:8px" id="all">Не нашлась? Показать все устройства</button>
-
-<div id="ctl" class="off">
-<section style="margin-top:12px">
-  <div class="row"><button id="on">Включить</button><button id="offb">Выключить</button></div>
-</section>
-
-<section>
-  <h2>Цвет</h2>
-  <input type="color" id="col" value="#ff0000">
-  <div class="row" style="margin-top:10px" id="presets"></div>
-</section>
-
-<section>
-  <h2>Яркость: <span id="bv">100</span>%</h2>
-  <input type="range" id="br" min="0" max="100" value="100">
-  <h2>Скорость эффекта: <span id="sv">50</span>%</h2>
-  <input type="range" id="sp" min="0" max="100" value="50">
-</section>
-
-<section>
-  <h2>Эффект (номер подбирается вручную)</h2>
-  <div class="row">
-    <button id="mp">−</button>
-    <input type="number" id="mode" value="128" min="0" max="255">
-    <button id="mn">+</button>
+<header>
+  <div id="strip"></div>
+  <div class="bar">
+    <button class="pri" id="conn">Подключить</button>
+    <button id="all">Все устр.</button>
+    <button id="on">Вкл</button><button id="off">Выкл</button>
   </div>
-  <p style="color:var(--mut);font-size:13px;margin:8px 0 0">Нажимай + и смотри, что делает гирлянда. Номера, которые понравились, запиши.</p>
+  <div id="st">Не подключено. Закрой Lotus Lamp X и нажми «Подключить». Предпросмотр работает и без гирлянды.</div>
+</header>
+
+<section class="tab v" id="t-color">
+  <div class="p">
+    <canvas id="wheel" width="280" height="280"></canvas>
+    <div class="r"><input type="text" id="hex" value="#ff0000"><button class="s" id="rnd">Случайный</button></div>
+  </div>
+  <div class="p">
+    <h2>RGB</h2>
+    <div class="rg"><b style="color:#f55">R</b><input type="range" id="R" max="255"><span id="Rv">255</span>
+    <b style="color:#5f5">G</b><input type="range" id="G" max="255"><span id="Gv">0</span>
+    <b style="color:#58f">B</b><input type="range" id="B" max="255"><span id="Bv">0</span></div>
+    <div class="sw" id="sw"></div>
+  </div>
 </section>
 
-<section>
-  <h2>Своя команда (hex)</h2>
-  <input type="text" id="raw" value="7e070503ff000010ef">
-  <button style="width:100%;margin-top:8px" id="send">Отправить</button>
+<section class="tab" id="t-fx">
+  <div class="p"><h2>Эффекты. Нажми, и предпросмотр появится сверху</h2><div class="g" id="fxl"></div>
+  <p class="note">Эффекты считаются в браузере и отправляются на гирлянду много раз в секунду, поэтому страницу нужно держать открытой. Цвет меняется целиком, а не по отдельным диодам. «Дыхание», «Сердцебиение» и «Стробоскоп» берут цвет с вкладки «Цвет».</p></div>
 </section>
-</div>
 
-<section><h2>Журнал</h2><div id="log"></div></section>
+<section class="tab" id="t-mine">
+  <div class="p"><h2>Свой эффект: цвета по порядку</h2>
+    <div id="steps"></div>
+    <div class="r"><button id="addS">+ Цвет</button><button id="fade" class="on">Плавно</button></div>
+    <div class="r"><button class="pri" id="playM">Запустить</button></div>
+    <div class="r"><input type="text" id="mname" placeholder="Название"><button class="s" id="saveM">Сохранить</button></div>
+  </div>
+  <div class="p"><h2>Мои эффекты</h2><div class="g" id="saved"></div><p class="note" id="nosv">Пока пусто. Удержание кнопки удаляет эффект.</p></div>
+</section>
+
+<section class="tab" id="t-hw">
+  <div class="p"><h2>Встроенные режимы контроллера (работают сами, страницу держать не нужно)</h2>
+    <div class="r"><button class="s" id="mp">−</button><input type="number" id="mode" value="128" min="0" max="255"><button class="s" id="mn">+</button></div>
+    <div class="r"><button id="mgo">Включить режим</button></div>
+    <h2 style="margin-top:12px">Скорость режима: <span id="spv">50</span>%</h2>
+    <input type="range" id="sp" value="50">
+    <div class="r"><input type="text" id="hname" placeholder="Как назвать этот режим?"><button class="s" id="hsave">В избранное</button></div>
+    <div class="g" id="hfav" style="margin-top:10px"></div>
+    <p class="note">Листай номера кнопками + и −, а понравившиеся сохраняй с названием. Удержание кнопки удаляет.</p></div>
+</section>
+
+<section class="tab" id="t-more">
+  <div class="p"><h2>Таймер сна</h2>
+    <div class="r"><input type="number" id="tm" value="30" min="1"><span class="s">мин</span><button class="s pri" id="tgo">Запустить</button></div>
+    <p class="note" id="tl">Яркость плавно падает за 30 секунд до выключения.</p></div>
+  <div class="p"><h2>Общая яркость: <span id="bv">100</span>%</h2>
+    <input type="range" id="br" min="1" max="100" value="100">
+    <h2>Скорость эффектов: <span id="sv">1.0</span>×</h2>
+    <input type="range" id="spd" min="2" max="40" value="10"></div>
+  <div class="p"><h2>Своя команда (hex)</h2>
+    <div class="r"><input type="text" id="raw" value="7e070503ff000010ef"><button class="s" id="send">Отправить</button></div>
+    <div id="log" class="note" style="font-family:monospace;max-height:120px;overflow:auto;white-space:pre-wrap"></div></div>
+</section>
+
+<nav id="nav">
+  <button class="v" data-t="color"><b>◉</b>Цвет</button>
+  <button data-t="fx"><b>✦</b>Эффекты</button>
+  <button data-t="mine"><b>✎</b>Свои</button>
+  <button data-t="hw"><b>▤</b>Режимы</button>
+  <button data-t="more"><b>⚙</b>Ещё</button>
+</nav>
 
 <script>
-const $=id=>document.getElementById(id);
-let ch=null,dev=null,busy=Promise.resolve();
-const log=t=>{$('log').textContent=t+'\n'+$('log').textContent};
-const hex=s=>Uint8Array.from(s.replace(/[^0-9a-f]/gi,'').match(/../g)||[],h=>parseInt(h,16));
-const h2=n=>Math.max(0,Math.min(255,Math.round(n))).toString(16).padStart(2,'0');
+const $=s=>document.querySelector(s),h2=n=>Math.round(Math.max(0,Math.min(255,n))).toString(16).padStart(2,'0');
+const hexb=s=>Uint8Array.from((s.replace(/[^0-9a-f]/gi,'').match(/../g)||[]).map(h=>parseInt(h,16)));
+const log=t=>{$('#log').textContent=t+'\n'+$('#log').textContent};
+const store={get:(k,d)=>{try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}},set:(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+function hsv(h,s,v){h=((h%1)+1)%1;const i=Math.floor(h*6),f=h*6-i,p=v*(1-s),q=v*(1-f*s),u=v*(1-(1-f)*s);return[[v,u,p],[q,v,p],[p,v,u],[p,q,v],[u,p,v],[v,p,q]][i%6].map(x=>x*255)}
+function rgb2hsv([r,g,b]){r/=255;g/=255;b/=255;const m=Math.max(r,g,b),d=m-Math.min(r,g,b);let h=0;if(d){h=m==r?((g-b)/d)%6:m==g?(b-r)/d+2:(r-g)/d+4;h/=6}return[(h+1)%1,m?d/m:0,m]}
+const toHex=c=>'#'+c.map(h2).join(''),fromHex=s=>[1,3,5].map(i=>parseInt(s.slice(i,i+2),16));
+const lerp=(a,b,t)=>a.map((x,i)=>x+(b[i]-x)*t);
 
-function send(bytes){
-  if(typeof bytes==='string')bytes=hex(bytes);
-  if(!ch)return;
-  busy=busy.then(async()=>{
-    try{
-      if(ch.writeValueWithoutResponse)await ch.writeValueWithoutResponse(bytes);
-      else await ch.writeValue(bytes);
-      log('→ '+[...bytes].map(b=>h2(b)).join(''));
-    }catch(e){log('Ошибка записи: '+e.message)}
-  });
-  return busy;
-}
-
+/* ---------- Bluetooth ---------- */
+let ch=null,dev=null,q=[],run=false;
+async function pump(){if(run)return;run=true;while(q.length){const b=q.shift().b;try{ch.writeValueWithoutResponse?await ch.writeValueWithoutResponse(b):await ch.writeValue(b)}catch(e){log('Ошибка: '+e.message)}}run=false}
+function cmd(s,frame){if(!ch)return;if(frame)q=q.filter(x=>!x.f);q.push({b:hexb(s),f:frame});pump()}
 async function connect(all){
-  if(!navigator.bluetooth){$('st').textContent='Web Bluetooth недоступен. Открой страницу в Chrome по https-ссылке.';return}
+  if(!navigator.bluetooth){$('#st').textContent='Нужен Chrome на Android и https-ссылка.';return}
   try{
-    dev=await navigator.bluetooth.requestDevice(all===true?
-      {acceptAllDevices:true,optionalServices:[0xfff0]}:
-      {filters:[{namePrefix:'MELK'},{services:[0xfff0]}],optionalServices:[0xfff0]});
-    dev.addEventListener('gattserverdisconnected',()=>{ch=null;$('ctl').classList.add('off');$('st').textContent='Отключено';$('conn').textContent='Подключиться'});
-    $('st').textContent='Подключаюсь…';
+    dev=await navigator.bluetooth.requestDevice(all===true?{acceptAllDevices:true,optionalServices:[0xfff0]}:{filters:[{namePrefix:'MELK'},{services:[0xfff0]}],optionalServices:[0xfff0]});
+    dev.addEventListener('gattserverdisconnected',()=>{ch=null;$('#st').textContent='Отключено';$('#conn').textContent='Подключить'});
     let srv;
-    for(let i=1;i<=4;i++){
-      try{srv=await dev.gatt.connect();break}
-      catch(e){log('Попытка '+i+' не удалась: '+e.message);$('st').textContent='Подключаюсь… попытка '+(i+1);if(i==4)throw e;await new Promise(r=>setTimeout(r,800))}
-    }
-    const svc=await srv.getPrimaryService(0xfff0);
-    const chars=await svc.getCharacteristics();
-    log('Характеристики: '+chars.map(c=>c.uuid.slice(4,8)+(c.properties.write?'W':'')+(c.properties.writeWithoutResponse?'w':'')).join(' '));
-    ch=chars.find(c=>c.uuid.startsWith('0000fff3'))||chars.find(c=>c.properties.write||c.properties.writeWithoutResponse);
+    for(let i=1;i<=4;i++){try{$('#st').textContent='Подключаюсь, попытка '+i+'…';srv=await dev.gatt.connect();break}catch(e){if(i==4)throw e;await new Promise(r=>setTimeout(r,800))}}
+    const cs=await (await srv.getPrimaryService(0xfff0)).getCharacteristics();
+    ch=cs.find(c=>c.uuid.startsWith('0000fff3'))||cs.find(c=>c.properties.write||c.properties.writeWithoutResponse);
     if(!ch)throw new Error('нет характеристики для записи');
-    log('Пишу в '+ch.uuid.slice(4,8));
-    await send('7e0783');await send('7e0404');
-    $('st').textContent='Подключено: '+dev.name;
-    $('conn').textContent='Переподключиться';
-    $('ctl').classList.remove('off');
-  }catch(e){$('st').textContent='Не удалось: '+e.message;log(e.message)}
+    cmd('7e0783');cmd('7e0404');
+    $('#st').textContent='Подключено: '+dev.name;$('#conn').textContent='Переподключить';lastKey='';
+  }catch(e){$('#st').textContent='Не удалось: '+e.message}
 }
 
-const color=(r,g,b)=>send('7e070503'+h2(r)+h2(g)+h2(b)+'10ef');
-$('conn').onclick=()=>connect();
-$('all').onclick=()=>connect(true);
-$('on').onclick=()=>send('7e0404f00001ff00ef');
-$('offb').onclick=()=>send('7e0404000000ff00ef');
-$('col').oninput=e=>{const v=e.target.value;color(parseInt(v.slice(1,3),16),parseInt(v.slice(3,5),16),parseInt(v.slice(5,7),16))};
-$('br').oninput=e=>{$('bv').textContent=e.target.value;send('7e0401'+h2(e.target.value)+'01ffff00ef')};
-$('sp').oninput=e=>{$('sv').textContent=e.target.value;send('7e0402'+h2(e.target.value)+'ffffff00ef')};
-const setMode=()=>send('7e0503'+h2($('mode').value)+'06ffff00ef');
-$('mode').onchange=setMode;
-$('mp').onclick=()=>{$('mode').value=Math.max(0,+$('mode').value-1);setMode()};
-$('mn').onclick=()=>{$('mode').value=Math.min(255,+$('mode').value+1);setMode()};
-$('send').onclick=()=>send($('raw').value);
-[['#ff0000',255,0,0],['#00ff00',0,255,0],['#0000ff',0,0,255],['#ffffff',255,255,255],['#ff8800',255,136,0],['#aa00ff',170,0,255]].forEach(([c,r,g,b])=>{
-  const x=document.createElement('button');x.className='sw';x.style.background=c;x.onclick=()=>color(r,g,b);$('presets').appendChild(x)});
+/* ---------- Вывод цвета ---------- */
+let P=[255,0,0],M=100,S=1,spd=1,eff=null,t0=0,lastKey='',cur=[255,0,0],hwMode=false;
+const strip=$('#strip');for(let i=0;i<26;i++)strip.appendChild(document.createElement('i'));
+function out(c){
+  const k=M/100*S,r=c.map(x=>Math.round(Math.max(0,Math.min(255,x*k))));cur=r;
+  document.documentElement.style.setProperty('--c',toHex(r));
+  const key=r+'';if(key!==lastKey){lastKey=key;cmd('7e070503'+r.map(h2).join('')+'10ef',true)}
+}
+function setEff(e,id){eff=e;t0=performance.now();hwMode=false;document.querySelectorAll('.g button').forEach(b=>b.classList.remove('on'));if(id)id.classList.add('on');if(!e)out(P)}
+setInterval(()=>{if(eff)out(eff((performance.now()-t0)/1000*spd))},70);
+function setP(c,src){
+  P=c.map(Math.round);const[h,s]=rgb2hsv(P);
+  document.documentElement.style.setProperty('--a',toHex(hsv(h,Math.max(s,.5),1)));
+  if(src!=='rgb')['R','G','B'].forEach((k,i)=>{$('#'+k).value=P[i];});
+  ['R','G','B'].forEach((k,i)=>$('#'+k+'v').textContent=P[i]);
+  if(src!=='hex')$('#hex').value=toHex(P);
+  drawMark();
+  if(!eff)out(P)
+}
+
+/* ---------- Колесо ---------- */
+const cv=$('#wheel'),cx=cv.getContext('2d'),W=280,R0=W/2-4;
+const base=cx.createImageData(W,W);
+for(let y=0;y<W;y++)for(let x=0;x<W;x++){const dx=x-W/2,dy=y-W/2,d=Math.hypot(dx,dy);if(d>R0)continue;const c=hsv(Math.atan2(dy,dx)/6.2832,Math.min(1,d/R0),1),o=(y*W+x)*4;base.data.set([c[0],c[1],c[2],255],o)}
+function drawMark(){cx.clearRect(0,0,W,W);cx.putImageData(base,0,0);const[h,s]=rgb2hsv(P),a=h*6.2832,x=W/2+Math.cos(a)*s*R0,y=W/2+Math.sin(a)*s*R0;cx.beginPath();cx.arc(x,y,12,0,6.2832);cx.fillStyle=toHex(P);cx.fill();cx.lineWidth=3;cx.strokeStyle='#fff';cx.stroke()}
+function pick(e){const r=cv.getBoundingClientRect(),x=(e.clientX-r.left)*W/r.width-W/2,y=(e.clientY-r.top)*W/r.height-W/2;setEff(null);setP(hsv(Math.atan2(y,x)/6.2832,Math.min(1,Math.hypot(x,y)/R0),1),'wheel')}
+let dn=false;cv.onpointerdown=e=>{dn=true;cv.setPointerCapture(e.pointerId);pick(e)};cv.onpointermove=e=>dn&&pick(e);cv.onpointerup=()=>dn=false;
+['R','G','B'].forEach(k=>$('#'+k).oninput=()=>{setEff(null);setP(['R','G','B'].map(j=>+$('#'+j).value),'rgb')});
+$('#hex').onchange=e=>{if(/^#[0-9a-f]{6}$/i.test(e.target.value)){setEff(null);setP(fromHex(e.target.value),'hex')}};
+$('#rnd').onclick=()=>{setEff(null);setP(hsv(Math.random(),1,1))};
+['#ff0000','#ff7a00','#ffd000','#00ff40','#00e5ff','#0050ff','#a000ff','#ff00a0','#ffffff','#ffb46b'].forEach(c=>{const b=document.createElement('button');b.style.background=c;b.onclick=()=>{setEff(null);setP(fromHex(c))};$('#sw').appendChild(b)});
+
+/* ---------- Эффекты ---------- */
+let an=null,buf=null,hue=0,pl=0,sm=0;
+const lvl=()=>{if(!an)return 0;an.getByteFrequencyData(buf);let s=0;for(let i=0;i<10;i++)s+=buf[i];return s/2550};
+const noise=(()=>{let v=.5;return()=>(v=v*.8+Math.random()*.2)})();
+const FX=[
+ ['🌈','Радуга',t=>hsv(t*.08,1,1)],
+ ['🫁','Дыхание',t=>P.map(x=>x*(.08+.92*(Math.sin(t*1.6-1.57)*.5+.5)))],
+ ['❤','Сердцебиение',t=>{const p=t%1.1;return P.map(x=>x*Math.max(.05,Math.exp(-((p-.1)**2)*300)+.7*Math.exp(-((p-.4)**2)*300)))}],
+ ['🔥','Огонь',t=>{const n=noise();return[255*(.4+.6*n),(40+60*n)*n,0]}],
+ ['🕯','Свеча',t=>{const n=noise();return[255*(.55+.45*n),120*(.55+.45*n),20*n]}],
+ ['🚨','Полиция',t=>(Math.floor(t*4)%2?[255,0,0]:[0,40,255])],
+ ['⚡','Стробоскоп',t=>(Math.floor(t*10)%2?P:[0,0,0])],
+ ['🌌','Северное сияние',t=>hsv(.33+.25*(Math.sin(t*.35)*.5+.5)+.05*Math.sin(t*1.3),.9,.55+.45*Math.sin(t*.7)**2)],
+ ['🎲','Случайные цвета',t=>{const i=Math.floor(t/2.5),f=t/2.5-i,r=n=>Math.abs((Math.sin(n*127.1)*43758.5453)%1);return lerp(hsv(r(i),1,1),hsv(r(i+1),1,1),f*f*(3-2*f))}],
+ ['🌅','Рассвет (3 мин)',t=>{const p=Math.min(1,t/180);return p<.5?lerp([0,0,0],[255,30,0],p*2):lerp([255,30,0],[255,200,120],(p-.5)*2)}],
+ ['🌇','Закат (3 мин)',t=>{const p=Math.min(1,t/180);return p<.5?lerp([255,190,100],[255,50,0],p*2):lerp([255,50,0],[0,0,0],(p-.5)*2)}],
+ ['🎵','Музыка (микрофон)',t=>{const l=lvl();if(l>pl+.1)hue+=.12;pl=l*.4+pl*.6;sm=Math.max(l,sm*.85);return hsv(hue,1,Math.min(1,.1+sm*1.5))}]
+];
+FX.forEach(([ic,n,f])=>{const b=document.createElement('button');b.innerHTML='<span>'+ic+'</span>'+n;b.onclick=async()=>{
+  if(n.startsWith('Музыка')&&!an){try{const s=await navigator.mediaDevices.getUserMedia({audio:true}),ac=new AudioContext(),src=ac.createMediaStreamSource(s);an=ac.createAnalyser();an.fftSize=256;src.connect(an);buf=new Uint8Array(an.frequencyBinCount)}catch(e){$('#st').textContent='Нет доступа к микрофону';return}}
+  setEff(f,b)};$('#fxl').appendChild(b)});
+
+/* ---------- Свои эффекты ---------- */
+let steps=[{c:'#ff0000',d:1},{c:'#0000ff',d:1}],fadeOn=true,mine=store.get('mine',[]);
+function renderSteps(){const el=$('#steps');el.innerHTML='';steps.forEach((s,i)=>{const d=document.createElement('div');d.className='step';
+  d.innerHTML='<input type="color" value="'+s.c+'"><input type="number" step="0.1" min="0.1" value="'+s.d+'"><span>сек</span><button class="s">✕</button>';
+  const ci=d.children[0],di=d.children[1],bx=d.children[3];ci.oninput=()=>s.c=ci.value;di.onchange=()=>s.d=Math.max(.1,+di.value||1);bx.onclick=()=>{if(steps.length>1){steps.splice(i,1);renderSteps()}};el.appendChild(d)})}
+function stepsFx(st,fd){const tot=st.reduce((a,s)=>a+s.d,0);return t=>{let x=t%tot,i=0;while(i<st.length-1&&x>=st[i].d){x-=st[i].d;i++}const a=fromHex(st[i].c),b=fromHex(st[(i+1)%st.length].c);return fd?lerp(a,b,Math.min(1,x/st[i].d)):a}}
+$('#addS').onclick=()=>{steps.push({c:toHex(hsv(Math.random(),1,1)),d:1});renderSteps()};
+$('#fade').onclick=e=>{fadeOn=!fadeOn;e.target.classList.toggle('on',fadeOn);e.target.textContent=fadeOn?'Плавно':'Резко'};
+$('#playM').onclick=e=>setEff(stepsFx(steps.map(s=>({...s})),fadeOn),e.target);
+$('#saveM').onclick=()=>{const n=$('#mname').value.trim()||'Эффект '+(mine.length+1);mine.push({n,steps:steps.map(s=>({...s})),fd:fadeOn});store.set('mine',mine);$('#mname').value='';renderSaved()};
+function holdDel(b,name,arr,key,re){let tm;b.onpointerdown=()=>tm=setTimeout(()=>{if(confirm('Удалить «'+name+'»?')){arr.splice(arr.indexOf(b._it),1);store.set(key,arr);re()}},700);b.onpointerup=b.onpointerleave=()=>clearTimeout(tm);b.oncontextmenu=e=>e.preventDefault()}
+function renderSaved(){const el=$('#saved');el.innerHTML='';$('#nosv').style.display=mine.length?'none':'';mine.forEach(m=>{const b=document.createElement('button');b.textContent='✦ '+m.n;b._it=m;b.onclick=()=>setEff(stepsFx(m.steps,m.fd),b);holdDel(b,m.n,mine,'mine',renderSaved);el.appendChild(b)})}
+
+/* ---------- Встроенные режимы ---------- */
+let hw=store.get('hw',[]);
+const setMode=()=>{setEff(null);eff=null;hwMode=true;cmd('7e0503'+h2($('#mode').value)+'06ffff00ef')};
+$('#mgo').onclick=setMode;$('#mode').onchange=setMode;
+$('#mp').onclick=()=>{$('#mode').value=Math.max(0,+$('#mode').value-1);setMode()};
+$('#mn').onclick=()=>{$('#mode').value=Math.min(255,+$('#mode').value+1);setMode()};
+$('#sp').oninput=e=>{$('#spv').textContent=e.target.value;cmd('7e0402'+h2(e.target.value)+'ffffff00ef')};
+$('#hsave').onclick=()=>{hw.push({n:+$('#mode').value,name:$('#hname').value.trim()||'Режим '+$('#mode').value});store.set('hw',hw);$('#hname').value='';renderHw()};
+function renderHw(){const el=$('#hfav');el.innerHTML='';hw.forEach(m=>{const b=document.createElement('button');b.textContent='★ '+m.name;b._it=m;b.onclick=()=>{$('#mode').value=m.n;setMode()};holdDel(b,m.name,hw,'hw',renderHw);el.appendChild(b)})}
+
+/* ---------- Общее ---------- */
+$('#conn').onclick=()=>connect();$('#all').onclick=()=>connect(true);
+$('#on').onclick=()=>{cmd('7e0404f00001ff00ef');lastKey='';setTimeout(()=>{if(!eff)out(P)},150)};
+$('#off').onclick=()=>{setEff(null);eff=null;cmd('7e0404000000ff00ef')};
+$('#br').oninput=e=>{M=+e.target.value;$('#bv').textContent=M;lastKey='';if(hwMode)cmd('7e0401'+h2(M)+'01ffff00ef');else if(!eff)out(P)};
+$('#spd').oninput=e=>{spd=e.target.value/10;$('#sv').textContent=spd.toFixed(1)};
+$('#send').onclick=()=>cmd($('#raw').value);
+let tend=0,tint=null;
+$('#tgo').onclick=()=>{tend=Date.now()+Math.max(1,+$('#tm').value)*60000;clearInterval(tint);tint=setInterval(()=>{const r=(tend-Date.now())/1000;
+  if(r<=0){clearInterval(tint);S=1;setEff(null);eff=null;cmd('7e0404000000ff00ef');$('#tl').textContent='Выключено по таймеру.';return}
+  S=Math.min(1,r/30);$('#tl').textContent='До выключения: '+Math.floor(r/60)+':'+String(Math.floor(r%60)).padStart(2,'0');lastKey='';if(!eff)out(P)},1000)};
+$('#nav').onclick=e=>{const b=e.target.closest('button');if(!b)return;document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('v',t.id==='t-'+b.dataset.t));document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('v',x===b));scrollTo(0,0)};
+renderSteps();renderSaved();renderHw();setP(P);
 </script>
 </body>
 </html>
